@@ -20,3 +20,10 @@ plugins/<id>/
 ```
 
 Owners install exactly the `plugin.js` that was reviewed and merged here.
+
+## Licence
+
+Every plugin in this repository is published under the [MIT licence](LICENSE),
+so anyone can use, change and share it as they like. By submitting a plugin,
+you agree to license it under MIT and confirm you have the right to. This
+applies to the plugins here only, not to BedrockRelay itself.

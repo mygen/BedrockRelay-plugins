@@ -1,9 +1,17 @@
 # Submitting a plugin
 
 Open a pull request that adds one folder, `plugins/<id>/`, containing
-`plugin.js` and `plugin.json`. Read the
-[developer guide](https://bedrockrelay.com/developers.html) first. It explains
-the plugin format, and the best practices your plugin will be reviewed against.
+`plugin.js` and `plugin.json`.
+
+**Licence:** everything in this repository is published under the
+[MIT licence](LICENSE). By opening a pull request you agree that your
+contribution, including every later update to it, is licensed under MIT, and
+you confirm that you wrote it or otherwise have the right to license it that
+way. Don't submit code copied from somewhere with a different licence.
+
+Read the [developer guide](https://bedrockrelay.com/developers.html) first. It
+explains the plugin format, and the best practices your plugin will be
+reviewed against.
 
 ## plugin.json
 
