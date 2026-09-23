@@ -1,0 +1,10 @@
+{
+  "id": "inventory",
+  "name": "Inventory",
+  "version": "1.0.0",
+  "author": "BedrockRelay",
+  "description": "See what a player is carrying: armour, hotbar and everything in their inventory, with enchantments and durability.",
+  "privacy": "This shows everything a player is carrying, so keep it to people you trust.",
+  "minPackVersion": "0.3.0",
+  "commands": ["/inventory <player>"]
+}
