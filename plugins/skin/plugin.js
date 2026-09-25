@@ -12,7 +12,7 @@ const POSE = "kwfb01";
 export default {
   id: "skin",
   name: "Skin",
-  version: "1.0.0",
+  version: "1.0.1",
   description: "Show any Bedrock player's skin, rendered by MinecraftRender.",
   commands: [
     {
@@ -25,13 +25,14 @@ export default {
         const name = (typed ?? linkedPlayer ?? "").trim().replace(/^\./, "");
         if (!name) return "Say whose skin, or link your own with `/relay link` so this knows who you are.";
         if (name.length > 32) return "That's too long to be a gamertag.";
+        const imageUrl = `${RENDER}/${encodeURIComponent(`.${name}`)}/${POSE}.webp`;
 
         return {
           embed: {
             color: 0x5865f2,
             title: `${name}'s skin`,
-            url: "https://minecraftrender.com",
-            image: { url: `${RENDER}/${encodeURIComponent(`.${name}`)}/${POSE}` },
+            url: imageUrl,
+            image: { url: imageUrl },
             footer: { text: "Rendered by MinecraftRender" },
           },
         };
