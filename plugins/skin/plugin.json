@@ -1,0 +1,11 @@
+{
+  "id": "skin",
+  "name": "Skin",
+  "version": "1.0.0",
+  "author": "BedrockRelay",
+  "description": "Show any Bedrock player's skin, rendered by MinecraftRender. The player doesn't need to be online.",
+  "privacy": "Anyone allowed to use it can see any gamertag's skin. Discord loads the picture from minecraftrender.com.",
+  "homepage": "https://github.com/mygen/BedrockRelay-plugins/tree/main/plugins/skin",
+  "minPackVersion": "0.4.0",
+  "commands": ["/skin [gamertag]"]
+}

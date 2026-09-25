@@ -7,5 +7,8 @@
   "privacy": "This shows everything a player is carrying and keeps in their ender chest, so keep it to people you trust.",
   "homepage": "https://github.com/mygen/BedrockRelay-plugins/tree/main/plugins/inventory",
   "minPackVersion": "0.3.0",
-  "commands": ["/inventory <player>", "/enderchest <player>"]
+  "commands": ["/inventory <player>", "/enderchest <player>"],
+  "screenshots": [
+    { "file": "discord.png", "caption": "/inventory: a player's held items, armour, hotbar and inventory" }
+  ]
 }

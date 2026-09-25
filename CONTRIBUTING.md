@@ -25,7 +25,10 @@ reviewed against.
   "privacy": "Shows a player's current health.",
   "homepage": "https://github.com/you/health",
   "minPackVersion": "0.3.0",
-  "commands": ["/health <player>"]
+  "commands": ["/health <player>"],
+  "screenshots": [
+    { "file": "discord.png", "caption": "/health answering in Discord" }
+  ]
 }
 ```
 
@@ -41,6 +44,7 @@ reviewed against.
 | `homepage` | no | An `https` link to your source or docs. |
 | `minPackVersion` | yes | The oldest BedrockRelay pack it works with: `0.4.0` if it uses `choices`, `public`, `confirm`, `posts` or `linkedPlayer`, otherwise `0.3.0`. |
 | `commands` | yes | How each command is used, for the catalog page. |
+| `screenshots` | no | Up to 4 pictures of the plugin in Discord, shown on its catalog card. Each is a `file` in the plugin's folder (PNG, JPEG or WebP, under 1 MB) and a `caption` saying what it shows, which is also its alt text. Crop to the message itself; the card shows the top of each picture, and a click shows it whole. |
 
 ## What reviewers check
 
@@ -51,6 +55,7 @@ reviewed against.
 - Anything that changes the world is stated in its description and asks first with `confirm`.
 - Only answers meant for everyone are `public`, and it only posts by itself when it declares `posts`.
 - The code is readable: no minified, obfuscated or generated code, and a single file.
+- Screenshots, if any, show the plugin as it really looks, with no personal details or other people's names visible unless they agreed.
 
 ## Updates
 

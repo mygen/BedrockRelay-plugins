@@ -1,10 +1,13 @@
 {
   "id": "world",
   "name": "World",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "BedrockRelay",
   "description": "The state of the world, for everyone in the channel: day, time, weather, moon, difficulty, game rules, server speed (TPS) and what's loaded in each dimension.",
   "homepage": "https://github.com/mygen/BedrockRelay-plugins/tree/main/plugins/world",
   "minPackVersion": "0.4.0",
-  "commands": ["/world"]
+  "commands": ["/world"],
+  "screenshots": [
+    { "file": "discord.png", "caption": "/world: time, weather, game rules and what's loaded in each dimension" }
+  ]
 }

@@ -51,7 +51,7 @@ const count = (amount, noun) => `${amount} ${noun}${amount === 1 ? "" : "s"}`;
 export default {
   id: "world",
   name: "World",
-  version: "1.0.0",
+  version: "1.0.1",
   description: "The state of the world: day, time, weather, moon, difficulty, game rules, server speed and what's loaded in each dimension.",
   commands: [
     {
@@ -74,7 +74,7 @@ export default {
         fields.push({
           name: "Game rules",
           value: [`Keep inventory: **${onOff(rules.keepInventory)}**`, `PvP: **${onOff(rules.pvp)}**`, `Mob griefing: **${onOff(rules.mobGriefing)}**`,
-            `Daylight cycle: **${onOff(rules.doDaylightCycle)}**`].join(" · "),
+            `Daylight cycle: **${onOff(rules.doDayLightCycle)}**`].join(" · "),
           inline: false,
         });
         for (const [id, label] of DIMENSIONS) {

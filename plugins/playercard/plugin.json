@@ -6,5 +6,8 @@
   "description": "How a player is doing right now: health, hunger, level, game mode, dimension, effects, the device they play on and how long they've been online.",
   "homepage": "https://github.com/mygen/BedrockRelay-plugins/tree/main/plugins/playercard",
   "minPackVersion": "0.4.0",
-  "commands": ["/player [player]"]
+  "commands": ["/player [player]"],
+  "screenshots": [
+    { "file": "discord.png", "caption": "/player: health, hunger, level, game mode and effects" }
+  ]
 }

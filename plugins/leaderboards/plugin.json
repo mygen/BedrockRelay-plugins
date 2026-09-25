@@ -7,5 +7,8 @@
   "posts": "Playtime milestones: when someone reaches 10, 25, 50, 100, 250, 500 or 1,000 hours.",
   "homepage": "https://github.com/mygen/BedrockRelay-plugins/tree/main/plugins/leaderboards",
   "minPackVersion": "0.4.0",
-  "commands": ["/top <stat>", "/stats [player]"]
+  "commands": ["/top <stat>", "/stats [player]"],
+  "screenshots": [
+    { "file": "discord.png", "caption": "/stats: a player's playtime, kills, blocks and distance, with their rank for each" }
+  ]
 }
