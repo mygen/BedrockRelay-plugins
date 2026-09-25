@@ -3,7 +3,8 @@ import { findPlayer, prettyName } from "../relay/api.js";
 
 /**
  * Inventory — a BedrockRelay plugin.
- * /inventory <player> shows what a player is carrying.
+ * /inventory <player> shows what a player is carrying, and /enderchest
+ * <player> what's in their ender chest.
  */
 
 const NUMERALS = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
@@ -40,9 +41,9 @@ function fit(lines) {
 export default {
   id: "inventory",
   name: "Inventory",
-  version: "1.0.0",
-  description: "See what a player is carrying: armour, hotbar and everything in their inventory.",
-  privacy: "This shows everything a player is carrying, so keep it to people you trust.",
+  version: "1.1.0",
+  description: "See what a player is carrying, and what's in their ender chest: armour, hotbar and every item, with enchantments and durability.",
+  privacy: "This shows everything a player is carrying and keeps in their ender chest, so keep it to people you trust.",
   commands: [
     {
       name: "inventory",
@@ -80,6 +81,32 @@ export default {
               { name: "Inventory", value: fit(backpack) },
             ],
             footer: { text: `${used} of ${container?.size ?? 36} slots used` },
+          },
+        };
+      },
+    },
+    {
+      name: "enderchest",
+      description: "Show what's in a player's ender chest",
+      options: [{ name: "player", type: "player", description: "The player's name", required: true }],
+      run({ player: name }) {
+        const player = findPlayer(name);
+        if (!player) return `**${name}** isn't online right now. Ender chests can only be read while their owner is on.`;
+        const container = player.getComponent("minecraft:ender_inventory")?.container;
+        if (!container) return `Couldn't open **${player.name}**'s ender chest.`;
+        const items = [];
+        for (let slot = 0; slot < container.size; slot++) {
+          const item = container.getItem(slot);
+          if (item) items.push(describe(item));
+        }
+        // Three rows of nine, like the chest itself; each field has room for a row's worth of detail.
+        const rows = [items.slice(0, 9), items.slice(9, 18), items.slice(18)].filter((row) => row.length);
+        return {
+          embed: {
+            color: 0x8e44ad,
+            title: `${player.name}'s ender chest`,
+            fields: rows.length ? rows.map((row, index) => ({ name: index ? "\u200b" : "Contents", value: fit(row) })) : [{ name: "Contents", value: "_empty_" }],
+            footer: { text: `${items.length} of ${container.size} slots used` },
           },
         };
       },

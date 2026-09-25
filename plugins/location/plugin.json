@@ -5,6 +5,7 @@
   "author": "BedrockRelay",
   "description": "Find where a player is: their dimension and coordinates.",
   "privacy": "Coordinates can give away where someone's base is, so keep this to people you trust.",
+  "homepage": "https://github.com/mygen/BedrockRelay-plugins/tree/main/plugins/location",
   "minPackVersion": "0.3.0",
   "commands": ["/location <player>"]
 }

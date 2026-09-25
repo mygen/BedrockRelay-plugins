@@ -37,8 +37,9 @@ reviewed against.
 | `author` | yes | You, or your team. |
 | `description` | yes | One or two sentences. |
 | `privacy` | if it reveals anything about players | Shown beside the plugin's switch. |
+| `posts` | if it posts by itself | What it posts with `postToDiscord`, e.g. "Playtime milestones." Shown in the catalog. Must match `posts` in `plugin.js`. |
 | `homepage` | no | An `https` link to your source or docs. |
-| `minPackVersion` | yes | The oldest BedrockRelay pack it works with. `0.3.0` for now. |
+| `minPackVersion` | yes | The oldest BedrockRelay pack it works with: `0.4.0` if it uses `choices`, `public`, `confirm`, `posts` or `linkedPlayer`, otherwise `0.3.0`. |
 | `commands` | yes | How each command is used, for the catalog page. |
 
 ## What reviewers check
@@ -47,7 +48,8 @@ reviewed against.
 - It follows the best practices: quick `run()`, handles missing players and bad input, prefixes anything it stores with its id.
 - No network access, no `@minecraft/server-net` or `@minecraft/server-admin`, no reading server secrets or variables.
 - It declares `privacy` if it reveals anything about players.
-- Anything that changes the world is stated in its description.
+- Anything that changes the world is stated in its description and asks first with `confirm`.
+- Only answers meant for everyone are `public`, and it only posts by itself when it declares `posts`.
 - The code is readable: no minified, obfuscated or generated code, and a single file.
 
 ## Updates
