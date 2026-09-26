@@ -1,0 +1,12 @@
+{
+  "id": "audit",
+  "name": "Audit",
+  "version": "1.0.0",
+  "author": "BedrockRelay",
+  "description": "Posts when someone places TNT or end crystals, pours lava, starts fires, spawns a wither or kills a villager, and optionally mines diamonds, breaks shulker boxes or places netherite. Switch each on or off. It only watches: nothing is stopped.",
+  "privacy": "Posts who did what, and where, which can give away where someone's base is.",
+  "posts": "Risky things players do, each switchable: TNT, end crystals, respawn anchors, lava, fire, withers, villagers, rare ores, shulker boxes, netherite.",
+  "homepage": "https://github.com/mygen/BedrockRelay-plugins/tree/main/plugins/audit",
+  "minPackVersion": "0.4.2",
+  "commands": ["/audit [player]"]
+}
