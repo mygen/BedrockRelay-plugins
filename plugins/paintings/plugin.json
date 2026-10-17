@@ -1,0 +1,16 @@
+{
+  "id": "ingame-paintings",
+  "name": "Paintings",
+  "version": "1.9.10",
+  "author": "PPTribalize",
+  "description": "Render your linked player view with vanilla block colours and 122 static entity models, equipment approximations and generic entity fallbacks. 256 x 144; 96-block range; nearest 64 entities. No client skins, animated poses or particles.",
+  "privacy": "Paintings reveal nearby builds, players and entities. Paintings are posted publicly in the command Discord channel.",
+  "minPackVersion": "0.4.0",
+  "platforms": [
+    "server"
+  ],
+  "category": "fun",
+  "commands": [
+    "/paintings [view]"
+  ]
+}
