@@ -1,0 +1,18 @@
+{
+  "id": "item-cleaner",
+  "name": "Item Cleaner",
+  "version": "1.2.0",
+  "author": "PPTribalize",
+  "description": "Clears loaded dropped items on an admin-set timer. Optionally kills unnamed zombies, skeletons and bogged first. Warns players; includes death drops and farm output. Named mobs and thrown tridents are excluded.",
+  "homepage": "https://github.com/mygen/BedrockRelay-plugins/tree/main/plugins/item-cleaner",
+  "minPackVersion": "0.4.0",
+  "platforms": [
+    "server"
+  ],
+  "category": "tools",
+  "commands": [
+    "/itemcleaner-mobs <enabled>",
+    "/itemcleaner-set [days] [hours] [minutes]",
+    "/itemcleaner-status"
+  ]
+}

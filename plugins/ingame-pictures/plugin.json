@@ -1,0 +1,17 @@
+{
+  "id": "ingame-pictures",
+  "name": "Paintings",
+  "version": "2.0.0",
+  "author": "PPTribalize",
+  "description": "Draws a picture of what your player is looking at, with the game's own textures, and shows it in Discord.",
+  "privacy": "Pictures reveal nearby builds, players and entities. Pictures are posted publicly in the command Discord channel.",
+  "homepage": "https://github.com/mygen/BedrockRelay-plugins/tree/main/plugins/ingame-pictures",
+  "minPackVersion": "0.4.0",
+  "platforms": [
+    "server"
+  ],
+  "category": "fun",
+  "commands": [
+    "/paintings [view]"
+  ]
+}
