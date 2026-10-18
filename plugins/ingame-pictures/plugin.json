@@ -1,7 +1,7 @@
 {
   "id": "ingame-pictures",
   "name": "Paintings",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "author": "PPTribalize",
   "description": "Draws a picture of what your player is looking at, with the game's own textures, and shows it in Discord.",
   "privacy": "Pictures reveal nearby builds, players and entities. Pictures are posted publicly in the command Discord channel.",

@@ -14,13 +14,14 @@ import { findPlayer } from "../relay/api.js";
  * so a picture never holds up the server. To fit in the time, every fourth
  * pixel across and down is cast first; a pixel between four that saw open sky,
  * or the same kind of block on one flat surface, is worked out without a ray of
- * its own (fillPixel). A picture takes five or six seconds.
+ * its own (fillPixel). A picture takes a few seconds, longer with a lot in view;
+ * past DEADLINE_MS the rest is filled in roughly so it still goes out.
  */
 
 const WIDTH = 256, HEIGHT = 144, RANGE = 96;
 const TICK_BUDGET_MS = 15;
-/** When drawing stops and the picture goes out: BedrockRelay waits about 12 seconds for an answer. */
-const DEADLINE_MS = 8500;
+/** When drawing stops and the picture goes out: BedrockRelay waits 30 seconds for a slow command's answer. */
+const DEADLINE_MS = 25000;
 /** BedrockRelay draws at most this many see-through things (glass, plants, rails) over the picture. */
 const MAX_OVER = 16384;
 /** Block faces as the picture numbers them. */
@@ -488,7 +489,7 @@ function render(dimension, origin, forward, settings = {}) {
 export default {
   id: "ingame-pictures",
   name: "Paintings",
-  version: "2.0.1",
+  version: "2.1.0",
   description: "Draws a picture of what your player is looking at, with the game's own textures, and shows it in Discord.",
   privacy: "Pictures reveal nearby builds, players and entities. Pictures are posted publicly in the command Discord channel.",
   platforms: ["server"],
@@ -497,6 +498,7 @@ export default {
     name: "paintings",
     description: "Draw a picture of what your linked player is looking at",
     public: true,
+    slow: true,
     options: [{
       name: "view", type: "string", required: false,
       description: "Framing: normal by default, close for more detail, wide for more surroundings",
@@ -1875,5 +1877,12 @@ const MOB_MODELS = {
   ],
 };
 
-/** The same boxes in blocks. */
-const ENTITY_MODELS = Object.fromEntries(Object.entries(MOB_MODELS).map(([id, parts]) => [id, parts.map((part) => [...part.slice(0, 6).map((v) => v / 1000), ...part.slice(6)])]));
+/**
+ * The same boxes in blocks. A box coloured exactly [0, 0, 0] has no colour of its own (a bee's
+ * wings, a zombie's head): it takes the average of the mob's other boxes, so it isn't drawn black.
+ */
+const ENTITY_MODELS = Object.fromEntries(Object.entries(MOB_MODELS).map(([id, parts]) => {
+  const coloured = parts.filter((part) => part[6] || part[7] || part[8]);
+  const average = [6, 7, 8].map((c) => coloured.length ? Math.round(coloured.reduce((sum, part) => sum + part[c], 0) / coloured.length) : 0);
+  return [id, parts.map((part) => [...part.slice(0, 6).map((v) => v / 1000), ...(part[6] || part[7] || part[8] ? part.slice(6) : average)])];
+}));
