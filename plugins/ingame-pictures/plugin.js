@@ -19,7 +19,8 @@ import { findPlayer } from "../relay/api.js";
 
 const WIDTH = 256, HEIGHT = 144, RANGE = 96;
 const TICK_BUDGET_MS = 15;
-const DEADLINE_MS = 9000;
+/** When drawing stops and the picture goes out: BedrockRelay waits about 12 seconds for an answer. */
+const DEADLINE_MS = 8500;
 /** BedrockRelay draws at most this many see-through things (glass, plants, rails) over the picture. */
 const MAX_OVER = 16384;
 /** Block faces as the picture numbers them. */
@@ -444,12 +445,26 @@ function render(dimension, origin, forward, settings = {}) {
   const corners = order.length;
   for (let n = 0; n < WIDTH * HEIGHT; n++) if (!(corner(n % WIDTH, WIDTH) && corner(Math.floor(n / WIDTH), HEIGHT))) order.push(n);
 
-  let i = 0;
+  /** A pixel left when time runs out: a copy of the nearest corner, which has its own ray. */
+  function copyCorner(n) {
+    const px = n % WIDTH, py = Math.floor(n / WIDTH);
+    const x0 = px - (px % STEP), y0 = py - (py % STEP);
+    const cx = px - x0 < STEP / 2 ? x0 : Math.min(x0 + STEP, WIDTH - 1), cy = py - y0 < STEP / 2 ? y0 : Math.min(y0 + STEP, HEIGHT - 1);
+    cells.copyWithin(n * 3, (cy * WIDTH + cx) * 3, (cy * WIDTH + cx) * 3 + 3);
+  }
+
+  let i = 0, rushed = false;
   const started = Date.now();
   return new Promise((resolve, reject) => {
     const job = system.runInterval(() => {
       try {
-        if (Date.now() - started > DEADLINE_MS) throw new Error("Render deadline exceeded");
+        if (Date.now() - started > DEADLINE_MS) {
+          // Out of time: with every corner drawn, the rest copy their nearest corner and the picture
+          // still goes out, coarser in places. Without the corners there's nothing worth sending.
+          if (i < corners) throw new Error(`Out of time after ${i} of ${corners} first rays`);
+          for (; i < order.length; i++) copyCorner(order[i]);
+          rushed = true;
+        }
         const until = Date.now() + TICK_BUDGET_MS;
         for (let n = 0; i < order.length && (n < 64 || Date.now() < until); n++, i++) {
           const pixel = order[i];
@@ -459,7 +474,7 @@ function render(dimension, origin, forward, settings = {}) {
           system.clearRun(job);
           resolve({
             blocks: { width: WIDTH, height: HEIGHT, palette: palette.entries, data: base64(cells), ...(over.length ? { over: base64(over) } : {}) },
-            unavailable, entities: entities.count, omittedEntities: entities.omitted, took: Date.now() - started,
+            unavailable, entities: entities.count, omittedEntities: entities.omitted, rushed, took: Date.now() - started,
           });
         }
       } catch (error) {
@@ -473,7 +488,7 @@ function render(dimension, origin, forward, settings = {}) {
 export default {
   id: "ingame-pictures",
   name: "Paintings",
-  version: "2.0.0",
+  version: "2.0.1",
   description: "Draws a picture of what your player is looking at, with the game's own textures, and shows it in Discord.",
   privacy: "Pictures reveal nearby builds, players and entities. Pictures are posted publicly in the command Discord channel.",
   platforms: ["server"],
@@ -505,9 +520,11 @@ export default {
         const notes = [`${fov}° view`, `${RANGE}-block range`, `${picture.entities} mobs and players`];
         if (picture.omittedEntities) notes.push("nearest 64 only");
         if (picture.unavailable) notes.push("distant or unloaded areas left out");
+        if (picture.rushed) notes.push("rough in places: the server was busy");
         return { embed: { title: `Painting by ${name}`, image: { blocks: picture.blocks }, footer: { text: notes.join(" · ") } } };
-      } catch {
-        return "The picture could not be drawn. Try again while your player is in a loaded area.";
+      } catch (error) {
+        console.warn(`[Paintings] The picture could not be drawn: ${error}${error?.stack ? `\n${error.stack}` : ""}`);
+        return `The picture could not be drawn (${String(error?.message ?? error).slice(0, 160)}). Try again in a moment.`;
       } finally {
         busy = false;
         lastAt = Date.now();
