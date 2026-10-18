@@ -39,6 +39,8 @@ const SEE_THROUGH_NAMES = new Set([
   "wither_rose", "torchflower", "sunflower", "lilac", "rose_bush", "peony", "open_eyeblossom", "closed_eyeblossom",
   "cactus_flower", "crimson_roots", "warped_roots", "nether_sprouts", "hanging_roots", "glow_lichen", "sculk_vein",
 ]);
+/** Blocks that are invisible in game. */
+const INVISIBLE = /^(light_block(_\d+)?|barrier|structure_void|invisible_bedrock)$/;
 /** Blocks whose glow depends on their state (lit, charged, alive), and those that always glow. */
 const GLOWS_IF_LIT = /copper_bulb|redstone_lamp|candle|campfire|^(lit_)?(furnace|blast_furnace|smoker)$|^respawn_anchor$|^sea_pickle$/;
 const GLOWS = new RegExp([
@@ -59,9 +61,11 @@ function kindOf(typeId) {
   if (!kind) {
     const id = typeId.replace(/^minecraft:/, "").replace(/^waxed_/, "");
     kind = {
-      seeThrough: SEE_THROUGH.test(id) || SEE_THROUGH_NAMES.has(id),
+      // Blocks nobody sees in game (light blocks, barriers): rays carry on past them, drawing nothing.
+      invisible: INVISIBLE.test(id),
+      seeThrough: INVISIBLE.test(id) || SEE_THROUGH.test(id) || SEE_THROUGH_NAMES.has(id),
       // See-through, but not something you walk through: rays stop at it whatever they're told.
-      solid: /glass|_pane$|iron_bars|chain$/.test(id),
+      solid: /glass|_pane$|iron_bars|chain$|^barrier$|^invisible_bedrock$/.test(id),
       glow: id === "unlit_redstone_torch" ? false : GLOWS_IF_LIT.test(id) ? "states" : GLOWS.test(id),
       pillar: PILLARS.test(id),
       id,
@@ -380,8 +384,10 @@ function render(dimension, origin, forward, settings = {}) {
       // Behind something you walk through (a plant, a rail), the next ray leaves such blocks out, from the
       // same place. Behind glass, it leaves out that kind of block: slower, and windows are rarer.
       const excluded = [];
-      while (ray.hit?.block && seeThrough(ray.hit.block) && layers.length < 2 && over.length / 5 < MAX_OVER - 2) {
-        layers.push({ cell: blockCell(ray.hit), distance: blockDistance(ray.hit, origin, direction) });
+      let skipped = 0;
+      while (ray.hit?.block && seeThrough(ray.hit.block) && layers.length < 2 && skipped < 4 && over.length / 5 < MAX_OVER - 2) {
+        if (kindOf(ray.hit.block.typeId).invisible) skipped++;
+        else layers.push({ cell: blockCell(ray.hit), distance: blockDistance(ray.hit, origin, direction) });
         if (kindOf(ray.hit.block.typeId).solid) excluded.push(ray.hit.block.typeId);
         const past = blockDistance(ray.hit, origin, direction);
         const from = { x: origin.x + direction.x * past, y: origin.y + direction.y * past, z: origin.z + direction.z * past };
@@ -489,7 +495,7 @@ function render(dimension, origin, forward, settings = {}) {
 export default {
   id: "ingame-pictures",
   name: "Paintings",
-  version: "2.1.0",
+  version: "2.1.1",
   description: "Draws a picture of what your player is looking at, with the game's own textures, and shows it in Discord.",
   privacy: "Pictures reveal nearby builds, players and entities. Pictures are posted publicly in the command Discord channel.",
   platforms: ["server"],
