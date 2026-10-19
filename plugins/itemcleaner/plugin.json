@@ -1,0 +1,11 @@
+{
+  "id": "item-cleaner",
+  "name": "Item Cleaner",
+  "version": "1.1.1",
+  "author": "PPTribalize",
+  "description": "Automatically deletes loaded dropped items in all three dimensions at an admin-set interval. Warns players first. Disabled until configured; includes death drops and farm output.",
+  "minPackVersion": "0.4.0",
+  "platforms": ["server"],
+  "category": "tools",
+  "commands": ["/itemcleaner-set [days] [hours] [minutes]", "/itemcleaner-status"]
+}
